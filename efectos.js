@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //Movimiento de izquierda hacia posicion Original
 document.addEventListener("DOMContentLoaded", function () {
-    let ids = ["mov", "mov2", "mov3", "img4"]; // Lista de IDs
+    let ids = ["mov", "mov2", "mov3", "mov4"]; // Lista de IDs
 
     function iniciarAnimacion(id) {
         let imagen = document.getElementById(id);
@@ -213,10 +213,58 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+//De derecha a Izquierda
+document.addEventListener("DOMContentLoaded", function () {
+    let ids = ["di", "di2", "di3"]; // Lista de IDs
+
+    function verificarScroll() {
+        ids.forEach((id) => {
+            let imagen = document.getElementById(id);
+            if (!imagen) return;
+
+            let posicion = imagen.getBoundingClientRect().top;
+            let alturaPantalla = window.innerHeight;
+
+            if (posicion < alturaPantalla * 0.9) {
+                let inicio = Date.now();
+                let duracion = 1000; // Duración de la animación (1s)
+                let inicioPos = 200; // Distancia inicial desde la derecha
+                let finPos = 0; // Posición final
+
+                function animar() {
+                    let tiempoPasado = Date.now() - inicio;
+                    let progreso = tiempoPasado / duracion;
+
+                    if (progreso > 1) progreso = 1;
+
+                    let desplazamiento = inicioPos * (1 - progreso);
+                    imagen.style.opacity = progreso.toString();
+                    imagen.style.transform = `translateX(${desplazamiento}px)`;
+
+                    if (progreso < 1) {
+                        requestAnimationFrame(animar);
+                    }
+                }
+
+                if (!imagen.dataset.animado) {
+                    imagen.style.opacity = "0";
+                    imagen.style.transform = `translateX(${inicioPos}px)`;
+                    imagen.dataset.animado = "true";
+                    animar();
+                }
+            }
+        });
+    }
+
+    document.addEventListener("scroll", verificarScroll);
+    verificarScroll(); // Detecta imágenes visibles al cargar
+});
+
+
 
 //Fade in Scroll
 document.addEventListener("DOMContentLoaded", function () {
-    let ids = ["txt1", "txt2", "txt3"]; // IDs de los textos
+    let ids = ["txt1", "txt2", "txt3", "txt4"]; // IDs de los textos
 
     function verificarScroll() {
         ids.forEach((id) => {
