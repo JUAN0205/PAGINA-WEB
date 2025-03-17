@@ -1,6 +1,6 @@
 //Transicion de abajo hacia arriba
 document.addEventListener("DOMContentLoaded", function () {
-    let ids = ["texto", "texto2", "texto3"]; // Lista de IDs
+    let ids = ["texto","texto1", "texto2", "texto3", "texto4", "texto5", "texto6", "texto7"]; // Lista de IDs
     let elementos = [];
 
     // Configuración inicial de los estilos
@@ -34,44 +34,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //Efecto de letras por letras
 document.addEventListener("DOMContentLoaded", function () {
-    let ids = ["info", "info2", "info3"]; // Lista de IDs
-    let elementos = [];
+    let ids = ["info", "info1", "info2", "info3", "info4", "info5", "info6", "info7"];
+
+    async function escribirLetraPorLetra(elemento, texto) {
+        for (let i = 0; i < texto.length; i++) {
+            elemento.textContent += texto[i];
+            await new Promise(resolve => setTimeout(resolve, 30 + Math.random() * 20)); // Variación en el tiempo
+        }
+    }
+
+    let observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.target.dataset.animado === "false") {
+                entry.target.dataset.animado = "true";
+                escribirLetraPorLetra(entry.target, entry.target.dataset.textoCompleto);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
 
     ids.forEach((id) => {
         let elemento = document.getElementById(id);
         if (!elemento) return;
 
-        let textoCompleto = elemento.textContent.trim();
-        elemento.textContent = ""; // Limpia el contenido antes de la animación
-        elemento.dataset.textoCompleto = textoCompleto; // Guarda el texto en un atributo
-        elemento.dataset.animado = "false"; // Marca que aún no ha sido animado
+        let textoCompleto = elemento.innerText.trim();
+        elemento.textContent = "";
+        elemento.dataset.textoCompleto = textoCompleto;
+        elemento.dataset.animado = "false";
 
-        elementos.push(elemento); // Guarda el elemento para el scroll
+        observer.observe(elemento);
     });
-    function escribirLetraPorLetra(elemento, texto) {
-        let i = 0;
-        let intervalo = setInterval(() => {
-            if (i < texto.length) {
-                elemento.textContent += texto[i]; // Escribe una letra por vez
-                i++;
-            } else {
-                clearInterval(intervalo);
-            }
-        }, 40); // Velocidad de la animación
-    }
-    function detectarScroll() {
-        elementos.forEach((elemento) => {
-            let posicion = elemento.getBoundingClientRect().top;
-            let alturaPantalla = window.innerHeight;
-
-            if (posicion < alturaPantalla - 100 && elemento.dataset.animado === "false") {
-                elemento.dataset.animado = "true"; // Evita que se repita la animación
-                escribirLetraPorLetra(elemento, elemento.dataset.textoCompleto);
-            }
-        });
-    }
-    document.addEventListener("scroll", detectarScroll);
-    detectarScroll(); // Para ejecutar en elementos visibles al cargar la página
 });
 
 
@@ -175,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //Movimiento de izquierda hacia posicion Original
 document.addEventListener("DOMContentLoaded", function () {
-    let ids = ["mov", "mov2", "mov3", "mov4"]; // Lista de IDs
+    let ids = ["mov", "mov2", "mov3", "mov4","mov5", "mov6","mov7"]; // Lista de IDs
 
     function iniciarAnimacion(id) {
         let imagen = document.getElementById(id);
@@ -215,21 +207,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //De derecha a Izquierda
 document.addEventListener("DOMContentLoaded", function () {
-    let ids = ["di", "di2", "di3"]; // Lista de IDs
+    let ids = ["di", "di1", "di2", "di3", "di4", "di5", "di6", "di7", "di8","di9"]; 
 
     function verificarScroll() {
         ids.forEach((id) => {
             let imagen = document.getElementById(id);
-            if (!imagen) return;
+            if (!imagen || imagen.dataset.animado === "true") return;
 
             let posicion = imagen.getBoundingClientRect().top;
             let alturaPantalla = window.innerHeight;
 
             if (posicion < alturaPantalla * 0.9) {
                 let inicio = Date.now();
-                let duracion = 1000; // Duración de la animación (1s)
-                let inicioPos = 200; // Distancia inicial desde la derecha
-                let finPos = 0; // Posición final
+                let duracion = 1000; 
+                let inicioPos = 200; 
+                let finPos = 0; 
 
                 function animar() {
                     let tiempoPasado = Date.now() - inicio;
@@ -246,25 +238,25 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 }
 
-                if (!imagen.dataset.animado) {
-                    imagen.style.opacity = "0";
-                    imagen.style.transform = `translateX(${inicioPos}px)`;
-                    imagen.dataset.animado = "true";
-                    animar();
-                }
+                // Inicializar estilos y ejecutar animación solo si aún no ha sido animado
+                imagen.style.opacity = "0";
+                imagen.style.transform = `translateX(${inicioPos}px)`;
+                imagen.dataset.animado = "true"; // Marcar como animado
+                animar();
             }
         });
     }
 
     document.addEventListener("scroll", verificarScroll);
-    verificarScroll(); // Detecta imágenes visibles al cargar
+    verificarScroll();
 });
+
 
 
 
 //Fade in Scroll
 document.addEventListener("DOMContentLoaded", function () {
-    let ids = ["txt1", "txt2", "txt3", "txt4"]; // IDs de los textos
+    let ids = ["txt1", "txt2", "txt3", "txt4","txt5","txt6", "txt7","txt8", "txt9", "txt10", "txt11"]; // IDs de los textos
 
     function verificarScroll() {
         ids.forEach((id) => {
